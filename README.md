@@ -4,4 +4,5 @@ Mental Health is a critical issue in today’s health world. Mental Health is no
 
 <a href="https://abx9801.github.io/Chirag/">Website Link<a>
 
-## Status : project is still in prototype stage
+##### Status : Project is still in development stage 
+- The website is just a prototype
