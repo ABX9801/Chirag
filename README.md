@@ -8,4 +8,4 @@ Mental Health is a critical issue in today’s health world. Mental Health is no
 - The website is just a prototype
 
 ## Website
-<img src='screenshots/1.PNG">
+<img src="screenshots/1.PNG">
