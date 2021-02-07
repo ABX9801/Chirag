@@ -8,9 +8,8 @@ Chirag is a mental health conversational chatbot with which you can talk in orde
 <img src="screenshots/ss3.PNG">
 
 ### New Feature
-- When the application triggers suicidal intent it directly sends message to Suicidal Helpline along with the IP Address which can help to locate the person
-<center>
+- When the application triggers suicidal intent it directly sends message to Suicidal Helpline along with the IP Address which can help to locate the person'
+
   <div>
-    <img src="screenshots/feature1.PNG" width = 25% height = 500px><img src="screenshots/msg.jpg" width = 25% height=500px>
+    <img src="screenshots/feature1.PNG" width = 25% height = 500px><br><img src="screenshots/msg.jpg" width = 25% height=500px>
   </div>
-</center>
