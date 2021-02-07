@@ -6,3 +6,7 @@ Chirag is a mental health conversational chatbot with which you can talk in orde
 <img src="screenshots/ss2.PNG">
 
 <img src="screenshots/ss3.PNG">
+
+<div>
+  <img src="feature.PNG">
+</div>
