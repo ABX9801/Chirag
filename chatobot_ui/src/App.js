@@ -21,7 +21,6 @@ function App() {
           }
         }
       );
-      debugger;
       console.log(response);
       await params.injectMessage(response.data.response);
     }catch (error) {
@@ -50,7 +49,7 @@ function App() {
     }
   return (
     <div className="App">
-     <Chatbot settings={{general: {embedded: true}, botBubble : {showAvatar : false} }} flow={flow}/>
+     <Chatbot  flow={flow}/>
     </div>
   );
 }
