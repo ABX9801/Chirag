@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Body, Depends
 
-from ...utils.jwt import authorise_user_by_token
 from ...db.mongodb import get_database_conn, MongoClient
 from ...models.user import User, UserToCreate, UserResponse
 from ...services.user import create_user_in_db, log_user_in
@@ -19,7 +18,9 @@ async def create_user(
     except Exception as err:
         print(f"Error creating user || {err}")
         return UserResponse(username = "ERROR", email = "error@email.com", token="")
-    
+
+
+## Login User
 @router.post("/user/login", response_model=UserResponse)
 async def login_user(
     user_create : UserToCreate = Body(..., embed=True),

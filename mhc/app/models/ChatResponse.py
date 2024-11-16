@@ -21,3 +21,6 @@ class ChatResponse(BaseModel):
     user: UserContext = Field(default=UserContext())
     emotions: Emotions = Field(default=Emotions())
     response: str = Field(default=None)
+
+class ChatResponseStr(BaseModel):
+    response : str = Field(default="I'm having some trouble atm, Please try later")

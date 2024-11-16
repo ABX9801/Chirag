@@ -14,13 +14,14 @@ def _get_authorisation_token(authorisation: HTTPAuthorizationCredentials=Securit
         raise HTTPException(
             status_code=403, detail="Not authenticated"
         )
+    return authorisation.credentials
     
 async def authorise_user_by_token(
         token : str = Depends(_get_authorisation_token), 
         dbclient : MongoClient = Depends(get_database_conn)
 ):
     try:
-        user = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+        user = jwt.decode(token.encode('utf-8'), JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
         username = user["username"]
         password = user["password"]
         user = await find_user_by_username(username, dbclient)
