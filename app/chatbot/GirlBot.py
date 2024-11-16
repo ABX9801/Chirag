@@ -1,8 +1,7 @@
-from groq import Groq
-from config import GROQ_API_KEY
 import json
-
-from models.ChatResponse import ChatResponse, Emotions, UserContext
+from groq import Groq
+from app.config import GROQ_API_KEY
+from app.models.ChatResponse import ChatResponse, Emotions, UserContext
 
 
 class GirlBot:
