@@ -1,18 +1,16 @@
-# Ignore Python bytecode
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 
-# Ignore environment variables and settings
-.env
-config/settings.py
-
-# Ignore virtual environments
+# Virtual environments
 venv/
-env/
 .venv/
 
-# Ignore logs
-*.log
+# Environment variables
+.env
 
-# Ignore system files
-.DS_Store
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
