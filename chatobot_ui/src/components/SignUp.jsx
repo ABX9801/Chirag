@@ -3,6 +3,7 @@ import React from 'react'
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { FormContainer, TextInput, FormTitle, LoginButton } from './formstyles';
 
 
 const SignUp = () => {
@@ -38,26 +39,25 @@ const SignUp = () => {
         }
     }
   return (
-    <form>
-        SIGN UP FORM
+    <center>
+    <FormContainer>
+        <FormTitle>SIGN UP FORM</FormTitle>
         <br />
         <label>
-            Username:
-            <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
+            <TextInput type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder='Username' />
         </label>
         <br />
         <label>
-            Password:
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+            <TextInput type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder='Password'/>
         </label>
         <br />
         <label>
-            Email:
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
+            <TextInput type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder='Email'/>
         </label>
         <br />
-        <button type="button" onClick={onSubmit}>SignUp</button>
-    </form>    
+        <LoginButton type="button" onClick={onSubmit}>SignUp</LoginButton>
+    </FormContainer>    
+    </center>
   )
 }
 
