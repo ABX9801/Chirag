@@ -41,8 +41,13 @@ async def create_user_in_db(user : UserToCreate, dbclient : MongoClient):
     try:
         user_in_db = await find_user_by_username(user.username, dbclient)
         if user_in_db:
-            print("User already Present")
-            return  UserResponse(**user_in_db)
+            user_obj = User(**user_in_db)
+            if user_obj.verify_password(user.password):
+                print("User already Present")
+                token = get_token_for_user(user)
+                return  UserResponse(**user_in_db, token = token)
+            else:
+                return UserResponse(username = "ERROR", email = "error@email.com", token="")
 
         salt = bcrypt.gensalt()
         hashedPassword = bcrypt.hashpw(user.password.encode('utf-8'), salt)
