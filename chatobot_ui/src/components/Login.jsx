@@ -12,7 +12,6 @@ const Login = () => {
 
     const onSubmit = async () => {
         try{
-            console.log("onSubmit")
             const response = await axios.post(
                 "http://localhost:8000/api/user/login",
                 {

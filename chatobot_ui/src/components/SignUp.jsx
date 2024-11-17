@@ -12,7 +12,6 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
 
     const onSubmit = async () => {
-        debugger;
         try{
             const response = await axios.post(
                 "http://localhost:8000/api/user/create",
