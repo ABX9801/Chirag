@@ -12,15 +12,14 @@ class Emotions(BaseModel):
     Suicidality: float = Field(default=0.0)
 
 class UserContext(BaseModel):
-    name: str = Field(default=None)
-    age: str = Field(default=None)
-    context: str = Field(default=None)
+    name: str = Field(default="")
+    age: str = Field(default="")
 
 
 class ChatResponse(BaseModel):
     user: UserContext = Field(default=UserContext())
-    emotions: Emotions = Field(default=Emotions())
     response: str = Field(default=None)
+    updated_context : str = Field()
 
 class ChatResponseStr(BaseModel):
     response : str = Field(default="I'm having some trouble atm, Please try later")

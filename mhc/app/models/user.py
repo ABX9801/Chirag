@@ -17,7 +17,7 @@ class User(BaseModel):
     email: EmailStr = Field(default=None)
     salt : str = Field(default=None)
     user_context : UserContext = Field(default=UserContext())
-    user_emotions : Emotions = Field(default=Emotions())
+    conversation_context : str = Field(default="")
 
     def verify_password(self, password):
         return password_context.verify(password, self.hashedPassword)

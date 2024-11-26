@@ -11,6 +11,7 @@ DB_NAME = os.getenv("DB_NAME")
 
 ## COLLECTIONS
 USER_COLLECTION = "users"
+CHATS_COLLECTION =  "chats"
 
 ## SECTETS/KEYS
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
