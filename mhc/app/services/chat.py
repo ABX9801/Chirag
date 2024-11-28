@@ -5,6 +5,7 @@ from app.db.mongodb import MongoClient
 from app.chatbot.GirlBot import GirlBot
 from config import DB_NAME, USER_COLLECTION, CHATS_COLLECTION
 from app.models.chat import ChatDocument
+from app.utils.encryption_utils import encrypt_text, decrypt_text
 
 
 async def update_user_context(dbclient : MongoClient, user: User, user_info: dict, conversation_context: str):
@@ -33,7 +34,11 @@ async def get_previous_chats_for_user(user: User, dbclient : MongoClient):
                 "reply" : 1
             },
             sort = [("created_at", -1)],
-        ).limit(5).to_list(None)
+        ).limit(10).to_list(None)
+        for chat in previous_chats:
+            del chat["_id"]
+            chat["user_input"] = decrypt_text(chat["user_input"])
+            chat["reply"] = decrypt_text(chat["reply"])
         return previous_chats
     except Exception as err:
         print("Error in getting previous chats || ", err)
@@ -42,10 +47,12 @@ async def get_previous_chats_for_user(user: User, dbclient : MongoClient):
 
 async def save_user_chat(user: User, input : str, reply : str, dbclient : MongoClient):
     try:
+        encrypted_user_input = encrypt_text(input)
+        encrypted_reply = encrypt_text(reply)
         chat_doc = ChatDocument(**{
             "username" : user.username,
-            "user_input" : input,
-            "reply" : reply
+            "user_input" : encrypted_user_input,
+            "reply" : encrypted_reply
         }).dict()
         await dbclient[DB_NAME][CHATS_COLLECTION].insert_one(chat_doc)
     except Exception as err:
