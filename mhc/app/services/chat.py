@@ -1,6 +1,6 @@
 import asyncio
 from app.models.user import User
-from app.models.ChatResponse import ChatResponseStr, Emotions, UserContext
+from app.models.ChatResponse import ChatResponseStr
 from app.db.mongodb import MongoClient
 from app.chatbot.GirlBot import GirlBot
 from config import DB_NAME, USER_COLLECTION, CHATS_COLLECTION
