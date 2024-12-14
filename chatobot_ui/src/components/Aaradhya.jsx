@@ -16,6 +16,7 @@ export const Aaradhya = () => {
   }, []);
 
   const chatWithAradhya = async (params) => {
+    const user_token = Cookies.get("USER_TOKEN");
     try {
       const response = await axios.post(
         "http://localhost:8000/api/chat",
@@ -25,7 +26,7 @@ export const Aaradhya = () => {
         {
           headers: {
             Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN0cmluZyIsInBhc3N3b3JkIjoic3RyaW5nIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIn0.aKRJmsIeTQFxSYsYzADY4XgxG1sK3xD6376NW4n_5R4",
+              `Bearer ${user_token}`,
           },
         }
       );

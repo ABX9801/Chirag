@@ -1,7 +1,10 @@
 import json
 from groq import Groq
-from app.models.ChatResponse import ChatResponse, Emotions, UserContext
+from app.models.ChatResponse import CalendarInput, ChatResponse, Emotions, UserContext
 from config import GROQ_API_KEY
+from app.services.calendar import schedule_calendar_event
+from  dateparser import parse
+from datetime import datetime
 
 
 
@@ -11,6 +14,7 @@ class GirlBot:
         self.user_context = UserContext().dict()
         self.conversation_context = ""
         self.previous_conversation = []
+        self.user_email = ""
 
     def get_prompt(self, user_input: str):
         return f"""
@@ -27,11 +31,15 @@ class GirlBot:
         User's Current Input
         {user_input}
 
+        ### Todays Date
+        {datetime.now().strftime("%Y-%m-%d")}
+
         Your Task
         Using the given information, respond as a supportive and understanding friend. Your response should be:
         1.Positive and constructive while acknowledging the user's emotions.
         2.Open-ended to encourage further conversation.
         3.Brief (10-15 words).
+        4. If there is an ask for creating a calendar event for the user use the provided information create a json for the calendar event and return it. If there is no event to be created return an empty dictionary.
         If there is new information about the user, update the User Information accordingly. Additionally, refine the Conversation Context based on the new exchange to keep it concise (max 50 words).
 
         Response Format
@@ -44,7 +52,13 @@ class GirlBot:
 		        "age": "User's Age Group (e.g., 0-5, 6-12, 13-18, etc.)"
 	        },
 	        "response": "A short and compassionate message tailored to the user (10-15 words, with or without emojis).",
-	        "updated_context": "Updated context about the conversation in not more than 50 words."
+	        "updated_context": "Updated context about the conversation in not more than 50 words.",
+            "calenndar_event": str({
+                "title": "Event Title",
+                "start_datetime": "Event Start Date and TIme calculate from input in ISO Format",
+                "end_datetime": "Event End Date and Time in ISO Format",
+                "description": "a short description about the event"
+            })
         })}
 
         """
@@ -91,6 +105,19 @@ class GirlBot:
         print("Updating conversation context")
         self.conversation_context = conversation_context
 
+    def schedule_calendar_event(self, user_email: str ,calendar_event: dict):
+        try:
+            calendar_event_obj = CalendarInput(**calendar_event)
+            event = schedule_calendar_event(
+                summary=calendar_event_obj.title,
+                description=calendar_event_obj.description,
+                attendee_emails=[user_email],
+                start_date_time=calendar_event_obj.start_datetime,
+                end_date_time=calendar_event_obj.end_datetime
+            )
+        except Exception as err:
+            print("Error in scheduling calendar event || ", err)
+
     
     def chat(self, user_input: str):
         chat_response = self.chat_with_llm(user_input)
@@ -102,5 +129,9 @@ class GirlBot:
         conversation_context = response.get("updated_context")
         self.update_conversation_context(conversation_context)
         
+        calendar_event = response.get("calendar_event")
+        if calendar_event:
+            user_email = self.user_email
+            self.schedule_calendar_event(user_email, calendar_event)
         chat_response = response.get("response")
         return chat_response

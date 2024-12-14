@@ -66,6 +66,7 @@ async def chat_with_girlbot(user: User, input : str, dbclient : MongoClient)-> C
         bot.previous_conversation = previous_chats
         bot.conversation_context = user.conversation_context
         bot.user_context = user.user_context
+        bot.user_email = user.email
         response = bot.chat(input)
         await asyncio.gather(
             update_user_context(dbclient, user, bot.user_context, bot.conversation_context),
