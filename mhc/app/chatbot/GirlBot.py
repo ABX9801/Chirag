@@ -51,7 +51,7 @@ class GirlBot:
 		        "name": "User's Name",
 		        "age": "User's Age Group (e.g., 0-5, 6-12, 13-18, etc.)"
 	        },
-	        "response": "A short and compassionate message tailored to the user (10-15 words, with or without emojis).",
+	        "response": "A short and compassionate message tailored to the user (no more than 50 words, with or without emojis).",
 	        "updated_context": "Updated context about the conversation in not more than 50 words.",
             "calenndar_event": str({
                 "title": "Event Title",
