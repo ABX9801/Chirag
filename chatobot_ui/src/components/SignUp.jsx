@@ -30,7 +30,7 @@ const SignUp = () => {
             Cookies.set("USER_TOKEN", response.data.token);
             Cookies.set("USER_NAME", response.data.username);
             Cookies.set("USER_EMAIL", response.data.email);
-            navigate("/chatbot");
+            window.location.replace("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:3000/chatbot&client_id=160028008157-e6e1jfi0v9e5qdc5c9mt37lp1o0mbdjc.apps.googleusercontent.com")
         } catch( error ) {
             console.log(error)
             setUsername("");

@@ -4,12 +4,46 @@ import Chatbot from 'react-chatbotify';
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 
+const getCalendarCode = () => {
+  try {
+    const code = window.location.href.split("code=")[1].split("&scope")[0];
+    return decodeURIComponent(code);
+  } catch (error) {
+    console.error("Error extracting calendar code:", error);
+    return null;
+  }
+}
+
+const getCalendarAccessToken = () => {
+  let access_token = Cookies.get("CALENDAR_ACCESS_TOKEN");
+  const code = getCalendarCode();
+  const user_token = Cookies.get("USER_TOKEN");
+  const response = axios.post(
+    "http://localhost:8000/api/user/calendar/access",
+    {
+      calendar_code : code
+    },
+    {
+      headers: {
+        Authorization:
+          `Bearer ${user_token}`,
+      },
+    }
+  ).catch((err) => {
+    console.log(err);
+  });
+  access_token = response?.access_token;
+  Cookies.set("CALENDAR_ACCESS_TOKEN", access_token);
+  return access_token;
+}
+
 export const Aaradhya = () => {
   const navigate = useNavigate();
   const [hasError, setHasError] = React.useState(false);
 
   useEffect(() => {
     const username = Cookies.get("USER_TOKEN");
+   const access_token = getCalendarAccessToken();
     if (!username) {
       navigate("/login");
     }

@@ -15,7 +15,10 @@ venv/
 # VS Code settings
 .vscode/
 
+# test scripts
+test.py
 
 #credentials or sensitive file
 creds.json
 token.json
+web_creds.json

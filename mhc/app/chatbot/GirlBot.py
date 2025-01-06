@@ -2,7 +2,7 @@ import json
 from groq import Groq
 from app.models.ChatResponse import CalendarInput, ChatResponse, Emotions, UserContext
 from config import GROQ_API_KEY
-from app.services.calendar import schedule_calendar_event
+from app.services.calendar import schedule_calendar_event_async
 from  dateparser import parse
 from datetime import datetime
 
@@ -105,13 +105,14 @@ class GirlBot:
         print("Updating conversation context")
         self.conversation_context = conversation_context
 
-    def schedule_calendar_event(self, user_email: str ,calendar_event: dict):
+    async def schedule_calendar_event(self, calendar_event: dict):
         try:
             calendar_event_obj = CalendarInput(**calendar_event)
-            event = schedule_calendar_event(
+            event = await schedule_calendar_event_async(
+                user=self.user,
                 summary=calendar_event_obj.title,
                 description=calendar_event_obj.description,
-                attendee_emails=[user_email],
+                attendee_emails=[],
                 start_date_time=calendar_event_obj.start_datetime,
                 end_date_time=calendar_event_obj.end_datetime
             )
@@ -119,7 +120,7 @@ class GirlBot:
             print("Error in scheduling calendar event || ", err)
 
     
-    def chat(self, user_input: str):
+    async def chat(self, user_input: str):
         chat_response = self.chat_with_llm(user_input)
         response = self.parse_response(chat_response)
 
@@ -132,6 +133,6 @@ class GirlBot:
         calendar_event = response.get("calendar_event")
         if calendar_event:
             user_email = self.user_email
-            self.schedule_calendar_event(user_email, calendar_event)
+            await self.schedule_calendar_event(calendar_event)
         chat_response = response.get("response")
         return chat_response

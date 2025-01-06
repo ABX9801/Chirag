@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, EmailStr
 from passlib.context import CryptContext
-
+from typing import Optional
 from app.models.ChatResponse import UserContext, Emotions
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -18,6 +18,8 @@ class User(BaseModel):
     salt : str = Field(default=None)
     user_context : UserContext = Field(default=UserContext())
     conversation_context : str = Field(default="")
+    google_calendar_access_token : Optional[str] = Field(default=None)
+    google_calendar_refresh_token : Optional[str] = Field(default=None)
 
     def verify_password(self, password):
         return password_context.verify(password, self.hashedPassword)
