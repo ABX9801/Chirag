@@ -17,6 +17,9 @@ const getCalendarCode = () => {
 const getCalendarAccessToken = () => {
   let access_token = Cookies.get("CALENDAR_ACCESS_TOKEN");
   const code = getCalendarCode();
+  if (!code) {
+    return
+  }
   const user_token = Cookies.get("USER_TOKEN");
   const response = axios.post(
     "http://localhost:8000/api/user/calendar/access",
@@ -37,13 +40,33 @@ const getCalendarAccessToken = () => {
   return access_token;
 }
 
+const getLocation = () => {
+  const userLattitude = Cookies.get("USER_LATTITUDE");
+  const userLongitude = Cookies.get("USER_LONGITUDE");
+  if (userLattitude && userLongitude) {
+    return
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      Cookies.set("USER_LATTITUDE", latitude);
+      Cookies.set("USER_LONGITUDE", longitude);
+    });
+  }
+  else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+
 export const Aaradhya = () => {
   const navigate = useNavigate();
   const [hasError, setHasError] = React.useState(false);
 
   useEffect(() => {
     const username = Cookies.get("USER_TOKEN");
-   const access_token = getCalendarAccessToken();
+    const access_token = getCalendarAccessToken();
+    getLocation();
     if (!username) {
       navigate("/login");
     }
