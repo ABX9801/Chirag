@@ -53,7 +53,7 @@ class GirlBot:
 	        },
 	        "response": "A short and compassionate message tailored to the user (no more than 50 words, with or without emojis).",
 	        "updated_context": "Updated context about the conversation in not more than 50 words.",
-            "calenndar_event": str({
+            "calendar_event": str({
                 "title": "Event Title",
                 "start_datetime": "Event Start Date and TIme calculate from input in ISO Format",
                 "end_datetime": "Event End Date and Time in ISO Format",
