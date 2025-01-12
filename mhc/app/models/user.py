@@ -10,6 +10,9 @@ class UserToCreate(BaseModel):
     password: str = Field(default=None)
     email: EmailStr = Field(default=None)
 
+class UserLocation(BaseModel):
+    latitude : float = Field(default=None)
+    longitude : float = Field(default=None)
 
 class User(BaseModel):
     username: str = Field(default=None)
@@ -20,6 +23,7 @@ class User(BaseModel):
     conversation_context : str = Field(default="")
     google_calendar_access_token : Optional[str] = Field(default=None)
     google_calendar_refresh_token : Optional[str] = Field(default=None)
+    user_location : UserLocation = Field(default=UserLocation())
 
     def verify_password(self, password):
         return password_context.verify(password, self.hashedPassword)

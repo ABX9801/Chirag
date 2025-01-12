@@ -1,5 +1,6 @@
+from typing import Optional
 from fastapi import APIRouter, Body, Depends, HTTPException
-from app.models.user import User
+from app.models.user import User, UserLocation
 from app.services.chat import chat_with_girlbot
 from ...models.ChatResponse import ChatResponseStr
 from ...utils.jwt import authorise_user_by_token
@@ -10,10 +11,11 @@ router = APIRouter()
 @router.post("/chat", response_model=ChatResponseStr)
 async def chat(
     chat_input : str  = Body(..., embed=True),
+    user_location : Optional[UserLocation] = Body(..., embed=True),
     db : MongoClient = Depends(get_database_conn),
     user : User = Depends(authorise_user_by_token)
 ):
     if user:
-        return await chat_with_girlbot(user, chat_input, db)
+        return await chat_with_girlbot(user, chat_input, db, user_location)
     else:
         raise HTTPException(status_code=422, detail="Invalid credentials")

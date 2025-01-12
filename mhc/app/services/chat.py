@@ -1,5 +1,5 @@
 import asyncio
-from app.models.user import User
+from app.models.user import User, UserLocation
 from app.models.ChatResponse import ChatResponseStr
 from app.db.mongodb import MongoClient
 from app.chatbot.GirlBot import GirlBot
@@ -8,14 +8,15 @@ from app.models.chat import ChatDocument
 from app.utils.encryption_utils import encrypt_text, decrypt_text
 
 
-async def update_user_context(dbclient : MongoClient, user: User, user_info: dict, conversation_context: str):
+async def update_user_context(dbclient : MongoClient, user: User, user_info: dict, conversation_context: str, user_location: UserLocation):
     try:
         await dbclient[DB_NAME][USER_COLLECTION].update_one(
             {"username" : user.username}, 
             {
                 "$set" : {
                     "user_context" : user_info,
-                    "conversation_context" : conversation_context
+                    "conversation_context" : conversation_context,
+                    "user_location" : user_location.dict()
                 }
             }
         )
@@ -59,9 +60,10 @@ async def save_user_chat(user: User, input : str, reply : str, dbclient : MongoC
         print("Error in saving user chat || ", err)
 
 
-async def chat_with_girlbot(user: User, input : str, dbclient : MongoClient)-> ChatResponseStr:
+async def chat_with_girlbot(user: User, input : str, dbclient : MongoClient, user_location: UserLocation)-> ChatResponseStr:
     try:
         bot = GirlBot()
+        user.user_location = user_location
         previous_chats = await get_previous_chats_for_user(user, dbclient)
         bot.previous_conversation = previous_chats
         bot.conversation_context = user.conversation_context
@@ -70,7 +72,7 @@ async def chat_with_girlbot(user: User, input : str, dbclient : MongoClient)-> C
         bot.user = user
         response = await bot.chat(input)
         await asyncio.gather(
-            update_user_context(dbclient, user, bot.user_context, bot.conversation_context),
+            update_user_context(dbclient, user, bot.user_context, bot.conversation_context, user_location),
             save_user_chat(user, input, response, dbclient)
         )
         return ChatResponseStr(response=response)

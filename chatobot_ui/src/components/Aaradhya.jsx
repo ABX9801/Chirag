@@ -79,6 +79,10 @@ export const Aaradhya = () => {
         "http://localhost:8000/api/chat",
         {
           chat_input: params.userInput,
+          user_location: {
+            latitude: Cookies.get("USER_LATTITUDE"),
+            longitude: Cookies.get("USER_LONGITUDE"),
+          },
         },
         {
           headers: {
